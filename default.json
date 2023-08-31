@@ -57,6 +57,12 @@
                 "tmp"
             ],
             "groupName": "Test & linting packages"
+        },
+        {
+            "packagePatterns": [
+                "metascraper"
+            ],
+            "groupName": "metascraper"
         }
     ]
 }
