@@ -10,11 +10,6 @@
     "separateMultipleMajor": false,
     "separateMinorPatch": false,
     "rebaseWhen": "never",
-    "node": {
-        "supportPolicy": [
-            "lts"
-        ]
-    },
     "postUpdateOptions": [
         "yarnDedupeHighest"
     ],
