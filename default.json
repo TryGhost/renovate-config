@@ -27,6 +27,36 @@
                 "@tryghost"
             ],
             "groupName": "@tryghost"
+        },
+        {
+            "description": "Group CSS preprocessors",
+            "packagePatterns": [
+                "^postcss",
+                "^css"
+            ],
+            "packageNames": [
+                "autoprefixer",
+                "ember-cli-postcss"
+            ],
+            "groupName": "CSS preprocessors"
+        },
+        {
+            "description": "Group JS testing and linting tools",
+            "extends": [
+                "packages:linters",
+                "packages:jsTest"
+            ],
+            "packageNames": [
+                "c8",
+                "eslint-plugin-ghost",
+                "grunt",
+                "nock",
+                "nodemon",
+                "rewire",
+                "supertest",
+                "tmp"
+            ],
+            "groupName": "Test & linting packages"
         }
     ]
 }
