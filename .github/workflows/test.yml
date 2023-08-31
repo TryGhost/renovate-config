@@ -12,7 +12,7 @@ jobs:
       matrix:
         file:
           - default
-          - renovate-config
+          - quiet
     env:
       RENOVATE_CONFIG_FILE: ${{ matrix.file }}.json
     steps:
