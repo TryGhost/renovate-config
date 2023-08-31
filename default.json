@@ -1,3 +1,36 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json"
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "description": "Base configuration rules",
+    "extends": [
+        "config:base",
+        ":disableRateLimiting",
+        ":maintainLockFilesWeekly",
+        "schedule:weekdays"
+    ],
+    "separateMultipleMajor": false,
+    "separateMinorPatch": false,
+    "rebaseWhen": "never",
+    "node": {
+        "supportPolicy": [
+            "lts"
+        ]
+    },
+    "postUpdateOptions": [
+        "yarnDedupeHighest"
+    ],
+    "packageRules": [
+        {
+            "description": "Require dashboard approval for major updates",
+            "matchUpdateTypes": [
+                "major"
+            ],
+            "dependencyDashboardApproval": true
+        },
+        {
+            "packagePatterns": [
+                "@tryghost"
+            ],
+            "groupName": "@tryghost"
+        }
+    ]
 }

@@ -1,0 +1,29 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "description": "Rules to keep things quiet",
+    "extends": [
+        "github>tryghost/renovate-config:default"
+    ],
+    "packageRules": [
+        {
+            "matchCurrentVersion": ">= 1.0.0",
+            "depTypeList": [
+                "dependencies",
+                "optionalDependencies"
+            ],
+            "automerge": true,
+            "automergeType": "pr",
+            "major": {
+                "automerge": false
+            }
+        },
+        {
+            "matchPackagePatterns": [
+                "^@tryghost/.+",
+                "gscan",
+                "knex-migrator"
+            ],
+            "automerge": false
+        }
+    ]
+}
