@@ -3,6 +3,7 @@
     "description": "Base configuration rules",
     "extends": [
         "config:base",
+        ":dependencyDashboard",
         ":disableRateLimiting",
         ":maintainLockFilesWeekly",
         "schedule:weekdays"
