@@ -7,7 +7,7 @@
     "packageRules": [
         {
             "matchCurrentVersion": ">= 1.0.0",
-            "depTypeList": [
+            "matchDepTypes": [
                 "dependencies",
                 "optionalDependencies"
             ],

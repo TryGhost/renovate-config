@@ -2,7 +2,7 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "description": "Base configuration rules",
     "extends": [
-        "config:base",
+        "config:recommended",
         ":dependencyDashboard",
         ":disableRateLimiting",
         ":maintainLockFilesWeekly",
@@ -23,18 +23,18 @@
             "dependencyDashboardApproval": true
         },
         {
-            "packagePatterns": [
+            "matchPackagePatterns": [
                 "@tryghost"
             ],
             "groupName": "@tryghost"
         },
         {
             "description": "Group CSS preprocessors",
-            "packagePatterns": [
+            "matchPackagePatterns": [
                 "^postcss",
                 "^css"
             ],
-            "packageNames": [
+            "matchPackageNames": [
                 "autoprefixer",
                 "ember-cli-postcss"
             ],
@@ -46,7 +46,7 @@
                 "packages:linters",
                 "packages:jsTest"
             ],
-            "packageNames": [
+            "matchPackageNames": [
                 "c8",
                 "eslint-plugin-ghost",
                 "grunt",
@@ -59,7 +59,7 @@
             "groupName": "Test & linting packages"
         },
         {
-            "packagePatterns": [
+            "matchPackagePatterns": [
                 "metascraper"
             ],
             "groupName": "metascraper"
