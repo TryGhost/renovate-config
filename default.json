@@ -26,7 +26,22 @@
             "matchPackagePatterns": [
                 "@tryghost"
             ],
-            "groupName": "@tryghost"
+            "excludePackageNames": [
+                "@tryghost/koenig-lexical"
+            ],
+            "excludePackagePrefixes": [
+                "@tryghost/kg-"
+            ],
+            "groupName": "TryGhost packages"
+        },
+        {
+            "matchPackageNames": [
+                "@tryghost/koenig-lexical"
+            ],
+            "matchPackagePrefixes": [
+                "@tryghost/kg-"
+            ],
+            "groupName": "Koenig packages"
         },
         {
             "description": "Group CSS preprocessors",
