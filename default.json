@@ -23,6 +23,12 @@
             "dependencyDashboardApproval": true
         },
         {
+            "matchPackagePrefixes": [
+                "@types"
+            ],
+            "groupName": "Types packages"
+        },
+        {
             "matchPackagePatterns": [
                 "@tryghost"
             ],
