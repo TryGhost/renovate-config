@@ -81,6 +81,12 @@
         },
         {
             "matchPackagePatterns": [
+                "vite"
+            ],
+            "groupName": "Vite packages"
+        },
+        {
+            "matchPackagePatterns": [
                 "metascraper"
             ],
             "groupName": "metascraper"
