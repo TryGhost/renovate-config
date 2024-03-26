@@ -6,6 +6,7 @@
         ":dependencyDashboard",
         ":disableRateLimiting",
         ":maintainLockFilesWeekly",
+        ":semanticCommitsDisabled",
         "schedule:weekdays"
     ],
     "separateMultipleMajor": false,
