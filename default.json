@@ -8,8 +8,7 @@
         ":maintainLockFilesWeekly",
         ":semanticCommitsDisabled",
         ":pinDependencies",
-        ":pinDevDependencies",
-        "schedule:weekdays"
+        ":pinDevDependencies"
     ],
     "separateMultipleMajor": false,
     "separateMinorPatch": false,
