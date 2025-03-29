@@ -64,7 +64,7 @@
             "groupName": "CSS preprocessors"
         },
         {
-            "description": "Separate test and linting tools",
+            "description": "Automerge test and linting tools",
             "extends": [
                 "packages:linters",
                 "packages:jsTest"
@@ -78,7 +78,8 @@
                 "rewire",
                 "supertest",
                 "tmp"
-            ]
+            ],
+            "automerge": true
         },
         {
             "matchPackagePatterns": [
