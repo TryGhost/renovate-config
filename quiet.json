@@ -1,10 +1,29 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "description": "Rules to keep things quiet",
+    "description": "Base configuration rules with quiet automerging",
     "extends": [
-        "github>tryghost/renovate-config:default"
+        "config:recommended",
+        ":dependencyDashboard",
+        ":disableRateLimiting",
+        ":maintainLockFilesWeekly",
+        ":semanticCommitsDisabled",
+        ":pinDependencies",
+        ":pinDevDependencies"
+    ],
+    "separateMultipleMajor": false,
+    "separateMinorPatch": false,
+    "rebaseWhen": "never",
+    "postUpdateOptions": [
+        "yarnDedupeHighest"
     ],
     "packageRules": [
+        {
+            "description": "Require dashboard approval for major updates",
+            "matchUpdateTypes": [
+                "major"
+            ],
+            "dependencyDashboardApproval": true
+        },
         {
             "matchCurrentVersion": ">= 1.0.0",
             "matchDepTypes": [
@@ -19,12 +38,81 @@
             }
         },
         {
+            "description": "Automerge test and linting tools",
+            "extends": [
+                "packages:linters",
+                "packages:jsTest"
+            ],
+            "matchPackageNames": [
+                "c8",
+                "eslint-plugin-ghost",
+                "grunt",
+                "nock",
+                "nodemon",
+                "rewire",
+                "supertest",
+                "tmp"
+            ],
+            "automerge": true
+        },
+        {
             "matchPackagePatterns": [
                 "^@tryghost/.+",
                 "gscan",
                 "knex-migrator"
             ],
             "automerge": false
+        },
+        {
+            "matchPackagePrefixes": [
+                "@types"
+            ],
+            "groupName": "Types packages"
+        },
+        {
+            "matchPackagePatterns": [
+                "@tryghost"
+            ],
+            "excludePackageNames": [
+                "@tryghost/koenig-lexical"
+            ],
+            "excludePackagePrefixes": [
+                "@tryghost/kg-"
+            ],
+            "groupName": "TryGhost packages"
+        },
+        {
+            "matchPackageNames": [
+                "@tryghost/koenig-lexical"
+            ],
+            "matchPackagePrefixes": [
+                "@tryghost/kg-"
+            ],
+            "groupName": "Koenig packages"
+        },
+        {
+            "description": "Group CSS preprocessors",
+            "matchPackagePatterns": [
+                "^postcss",
+                "^css"
+            ],
+            "matchPackageNames": [
+                "autoprefixer",
+                "ember-cli-postcss"
+            ],
+            "groupName": "CSS preprocessors"
+        },
+        {
+            "matchPackagePatterns": [
+                "vite"
+            ],
+            "groupName": "Vite packages"
+        },
+        {
+            "matchPackagePatterns": [
+                "metascraper"
+            ],
+            "groupName": "metascraper"
         }
     ]
 }
