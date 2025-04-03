@@ -12,7 +12,7 @@
     ],
     "separateMultipleMajor": false,
     "separateMinorPatch": false,
-    "rebaseWhen": "never",
+    "rebaseWhen": "automerging",
     "postUpdateOptions": [
         "yarnDedupeHighest"
     ],
