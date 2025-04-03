@@ -16,6 +16,11 @@
     "postUpdateOptions": [
         "yarnDedupeHighest"
     ],
+    "automergeSchedule": [
+        "0 17-23 * * 5,",
+        "* * * * 0,6",
+        "0 0-12 * * 1"
+    ],
     "packageRules": [
         {
             "description": "Require dashboard approval for major updates",
