@@ -17,9 +17,9 @@
         "yarnDedupeHighest"
     ],
     "automergeSchedule": [
-        "0 17-23 * * 5,",
+        "* 17-23 * * 5",
         "* * * * 0,6",
-        "0 0-12 * * 1"
+        "* 0-12 * * 1"
     ],
     "packageRules": [
         {
