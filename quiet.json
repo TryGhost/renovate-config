@@ -9,7 +9,7 @@
         ":semanticCommitsDisabled",
         ":pinDependencies",
         ":pinDevDependencies",
-        ":group:vite"
+        "group:vite"
     ],
     "separateMultipleMajor": false,
     "separateMinorPatch": false,
