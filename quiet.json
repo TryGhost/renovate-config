@@ -8,18 +8,14 @@
         ":maintainLockFilesWeekly",
         ":semanticCommitsDisabled",
         ":pinDependencies",
-        ":pinDevDependencies"
+        ":pinDevDependencies",
+        ":group:vite"
     ],
     "separateMultipleMajor": false,
     "separateMinorPatch": false,
     "rebaseWhen": "automerging",
     "postUpdateOptions": [
         "yarnDedupeHighest"
-    ],
-    "automergeSchedule": [
-        "* 17-23 * * 5",
-        "* * * * 0,6",
-        "* 0-12 * * 1"
     ],
     "packageRules": [
         {
