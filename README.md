@@ -4,7 +4,17 @@ Renovate presets for our GitHub repositories
 
 ## Validation
 
-You can validate the config by running
+### Quick test
+
+Run all tests (validation, preset resolution, and dry run):
+
+```bash
+./test.sh
+```
+
+### Manual validation
+
+You can validate the config syntax by running
 
 ```bash
 npx -p  renovate renovate-config-validator
