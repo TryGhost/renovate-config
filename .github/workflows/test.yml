@@ -13,7 +13,7 @@ jobs:
         file:
           - quiet
     env:
-      RENOVATE_CONFIG_FILE: ${{ matrix.file }}.json
+      RENOVATE_CONFIG_FILE: ${{ matrix.file }}.json5
     steps:
       - uses: actions/checkout@v3
 

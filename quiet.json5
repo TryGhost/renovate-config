@@ -2,22 +2,42 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "description": "Base configuration rules with quiet automerging",
     "extends": [
+        // https://docs.renovatebot.com/presets-config/#configrecommended
         "config:recommended",
+        // This is helpful for seeing the state of dependencies
         ":dependencyDashboard",
+        // Don't limit the number of PRs we can open
         ":disableRateLimiting",
+        // Lock file maintenance is really critical to keeping a repository healthy
         ":maintainLockFilesWeekly",
+        // We don't use semantic commits
         ":semanticCommitsDisabled",
+        // We pin dependencies to keep dependencies deterministic
         ":pinDependencies",
         ":pinDevDependencies",
+        // This isn't part of the recommended config, so adding it as we use vite
         "group:vite"
     ],
+    // Don't separate out PRs for individual major jumps
+    // TODO: review this one
     "separateMultipleMajor": false,
+    // Don't have separate PRs for minor and patch updates
     "separateMinorPatch": false,
+    // https://docs.renovatebot.com/configuration-options/#rebasewhen
+    // Let renovate rebase PRs when automerging
     "rebaseWhen": "automerging",
+    // Run `yarn-deduplicate --strategy highest` after yarn.lock updates
     "postUpdateOptions": [
         "yarnDedupeHighest"
     ],
+    // Custom packages rules, which extend the configuration above
     "packageRules": [
+        // Always require dashboard approval for major updates
+        // This was largely to avoid the noise of major updates which were ESM only
+        // The idea was to check and accept major updates if they were NOT ESM
+        // But this hasn't been workable with our capacity
+        // Plus, ESM-only is an edge case in the grand scheme of dependencies
+        // @TODO: review this one, consider it being Ghost-only
         {
             "description": "Require dashboard approval for major updates",
             "matchUpdateTypes": [
@@ -25,6 +45,11 @@
             ],
             "dependencyDashboardApproval": true
         },
+        // Automerge all minor and patch updates to all dependencies
+        // UNLESS the version number is less than 1.0.0 in which case
+        // We can't be sure if the bump is effectively major
+        // Also don't automerge major updates (overridden for some dependencies below)
+        // @TODO review this one, simplify with testing and linting
         {
             "matchCurrentVersion": ">= 1.0.0",
             "matchDepTypes": [
@@ -38,6 +63,9 @@
                 "automerge": false
             }
         },
+        // Always automerge test and linting tools
+        // Regardless of whether they're major or minor updates
+        // @TODO: review this one, consider branch merges (no PRs)
         {
             "description": "Automerge test and linting tools",
             "extends": [
@@ -56,6 +84,8 @@
             ],
             "automerge": true
         },
+        // Don't automerge @tryghost/ packages, gscan, or knex-migrator
+        // TODO: review this one, automerge patch updates at least?
         {
             "matchPackagePatterns": [
                 "^@tryghost/.+",
@@ -64,12 +94,14 @@
             ],
             "automerge": false
         },
+        // Group types packages together
         {
             "matchPackagePrefixes": [
                 "@types"
             ],
             "groupName": "Types packages"
         },
+        // Group TryGhost packages together
         {
             "matchPackagePatterns": [
                 "@tryghost"
@@ -82,6 +114,7 @@
             ],
             "groupName": "TryGhost packages"
         },
+        // Group Koenig packages together
         {
             "matchPackageNames": [
                 "@tryghost/koenig-lexical"
@@ -91,6 +124,7 @@
             ],
             "groupName": "Koenig packages"
         },
+        // Group CSS preprocessors together
         {
             "description": "Group CSS preprocessors",
             "matchPackagePatterns": [
@@ -103,6 +137,7 @@
             ],
             "groupName": "CSS preprocessors"
         },
+        // Group metascraper dependencies together
         {
             "matchPackagePatterns": [
                 "metascraper"
