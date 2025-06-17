@@ -44,6 +44,8 @@ git commit -m "Initial commit" -q
 echo "Running Renovate dry-run..."
 output=$(RENOVATE_CONFIG_FILE=../quiet.json5 npx -p renovate renovate --platform=local --dry-run 2>&1)
 
+echo "$output"
+
 if echo "$output" | grep -E "(Cannot find preset|Failed to look up preset)" > /dev/null; then
   echo "❌ ERROR: Preset resolution failed"
   echo "   External repos cannot use 'github>tryghost/renovate-config'"
