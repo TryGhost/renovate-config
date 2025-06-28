@@ -84,15 +84,17 @@
             ],
             "automerge": true
         },
-        // Don't automerge @tryghost/ packages, gscan, or knex-migrator
-        // TODO: review this one, automerge patch updates at least?
+        // Don't automerge major bumps for @tryghost/ packages, gscan, or knex-migrator
+        // If you don't want renovate to automerge your changes, make them majors
         {
             "matchPackagePatterns": [
                 "^@tryghost/.+",
                 "gscan",
                 "knex-migrator"
             ],
-            "automerge": false
+            "major": {
+                "automerge": false
+            }
         },
         // Group types packages together
         {
