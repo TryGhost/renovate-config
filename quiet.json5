@@ -16,7 +16,11 @@
         ":pinDependencies",
         ":pinDevDependencies",
         // This isn't part of the recommended config, so adding it as we use vite
-        "group:vite"
+        "group:vite",
+        // Force waiting 3 days for NPM packages before updating
+        // This helps protect us against any compromised packages and
+        // from pacakges being deleted from NPM
+        "security:minimumReleaseAgeNpm"
     ],
     // Don't separate out PRs for individual major jumps
     // TODO: review this one
@@ -114,7 +118,9 @@
             "excludePackagePrefixes": [
                 "@tryghost/kg-"
             ],
-            "groupName": "TryGhost packages"
+            "groupName": "TryGhost packages",
+            // Don't wait for the release age to pass for trusted packages
+            "minimumReleaseAge": "0 days"
         },
         // Group Koenig packages together
         {
@@ -124,7 +130,9 @@
             "matchPackagePrefixes": [
                 "@tryghost/kg-"
             ],
-            "groupName": "Koenig packages"
+            "groupName": "Koenig packages",
+            // Don't wait for the release age to pass for trusted packages
+            "minimumReleaseAge": "0 days"
         },
         // Group CSS preprocessors together
         {
