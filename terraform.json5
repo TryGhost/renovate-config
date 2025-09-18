@@ -22,7 +22,7 @@
         // Make sure all status checks pass before merging
         ":automergeRequireAllStatusChecks",
         // Add labels to PRs raised by this config
-        ":labels(deps, terraform)"
+        ":labels(deps, terraform, check-drift)"
     ],
     "packageRules": [
         {
