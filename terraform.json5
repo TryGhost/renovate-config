@@ -1,0 +1,35 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "description": "Base configuration rules for Terraform repos",
+    "extends": [
+        // https://docs.renovatebot.com/presets-config/#configrecommended
+        "config:best-practices",
+        // This is helpful for seeing the state of dependencies
+        ":dependencyDashboard",
+        // Don't limit the number of PRs we can open
+        ":disableRateLimiting",
+        // Lock file maintenance is really critical to keeping a repository healthy
+        ":maintainLockFilesWeekly",
+        // We don't use semantic commits
+        ":semanticCommitsDisabled",
+        // We pin dependencies to keep dependencies deterministic
+        ":pinDependencies",
+        ":pinDevDependencies",
+        // Automerge via branch not PRs
+        ":automergeBranch",
+        // Auto-merge Patch and Minor
+        ":automergeMinor",
+        // Make sure all status checks pass before merging
+        ":automergeRequireAllStatusChecks",
+        // Add labels to PRs raised by this config
+        ":labels(deps, terraform)"
+    ],
+    "packageRules": [
+        {
+            "description": "Pin Terraform versions",
+            "matchDatasources": ["github-releases", "github-tags"],
+            "matchPackageNames": ["hashicorp/terraform", "terraform"],
+            "allowedVersions": "<1.14"
+        }
+    ],
+}
