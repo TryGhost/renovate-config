@@ -30,6 +30,10 @@
     "postUpdateOptions": [
         "yarnDedupeHighest"
     ],
+    // Wait 4 days before merging package updates
+    // This helps protect us against any compromised packages and
+    // from pacakges being deleted from NPM
+    "minimumReleaseAge": "4 days",
     // Custom packages rules, which extend the configuration above
     "packageRules": [
         // Always require dashboard approval for major updates
@@ -114,7 +118,9 @@
             "excludePackagePrefixes": [
                 "@tryghost/kg-"
             ],
-            "groupName": "TryGhost packages"
+            "groupName": "TryGhost packages",
+            // Don't wait for the release age to pass for trusted packages
+            "minimumReleaseAge": "0 days"
         },
         // Group Koenig packages together
         {
