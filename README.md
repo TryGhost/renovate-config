@@ -45,4 +45,4 @@ RENOVATE_CONFIG_FILE=~/Sites/renovate-config/quiet.json5 RENOVATE_TOKEN=$GITHUB_
 
 # Copyright & License
 
-Copyright (c) 2013-2025 Ghost Foundation - Released under the [MIT license](LICENSE).
+Copyright (c) 2013-2026 Ghost Foundation - Released under the [MIT license](LICENSE).
