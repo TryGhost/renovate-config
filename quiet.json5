@@ -34,6 +34,10 @@
     "postUpdateOptions": [
         "yarnDedupeHighest"
     ],
+    // Automerge lock file maintenance PRs
+    "lockFileMaintenance": {
+        "automerge": true
+    },
     // Custom packages rules, which extend the configuration above
     "packageRules": [
         // Always require dashboard approval for major updates
