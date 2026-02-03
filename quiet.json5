@@ -40,19 +40,6 @@
     },
     // Custom packages rules, which extend the configuration above
     "packageRules": [
-        // Always require dashboard approval for major updates
-        // This was largely to avoid the noise of major updates which were ESM only
-        // The idea was to check and accept major updates if they were NOT ESM
-        // But this hasn't been workable with our capacity
-        // Plus, ESM-only is an edge case in the grand scheme of dependencies
-        // @TODO: review this one, consider it being Ghost-only
-        {
-            "description": "Require dashboard approval for major updates",
-            "matchUpdateTypes": [
-                "major"
-            ],
-            "dependencyDashboardApproval": true
-        },
         // Automerge all minor and patch updates to all dependencies
         // UNLESS the version number is less than 1.0.0 in which case
         // We can't be sure if the bump is effectively major
