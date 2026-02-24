@@ -40,56 +40,16 @@
     },
     // Custom packages rules, which extend the configuration above
     "packageRules": [
-        // Automerge all minor and patch updates to all dependencies
-        // UNLESS the version number is less than 1.0.0 in which case
-        // We can't be sure if the bump is effectively major
-        // Also don't automerge major updates (overridden for some dependencies below)
-        // @TODO review this one, simplify with testing and linting
+        // Automerge all dependency updates (major, minor, and patch)
         {
-            "matchCurrentVersion": ">= 1.0.0",
             "matchDepTypes": [
                 "devDependencies",
                 "dependencies",
-                "optionalDependencies"
+                "optionalDependencies",
+                "peerDependencies"
             ],
             "automerge": true,
-            "automergeType": "pr",
-            "major": {
-                "automerge": false
-            }
-        },
-        // Always automerge test and linting tools
-        // Regardless of whether they're major or minor updates
-        // @TODO: review this one, consider branch merges (no PRs)
-        {
-            "description": "Automerge test and linting tools",
-            "extends": [
-                "packages:linters",
-                "packages:jsTest"
-            ],
-            "matchPackageNames": [
-                "c8",
-                "eslint-plugin-ghost",
-                "grunt",
-                "nock",
-                "nodemon",
-                "rewire",
-                "supertest",
-                "tmp"
-            ],
-            "automerge": true
-        },
-        // Don't automerge major bumps for @tryghost/ packages, gscan, or knex-migrator
-        // If you don't want renovate to automerge your changes, make them majors
-        {
-            "matchPackagePatterns": [
-                "^@tryghost/.+",
-                "gscan",
-                "knex-migrator"
-            ],
-            "major": {
-                "automerge": false
-            }
+            "automergeType": "pr"
         },
         // Group types packages together
         {
@@ -125,16 +85,35 @@
             // Don't wait for the release age to pass for trusted packages
             "minimumReleaseAge": "0 days"
         },
-        // Group CSS preprocessors together
+        // Group CSS preprocessors and style pipeline packages together
         {
             "description": "Group CSS preprocessors",
             "matchPackagePatterns": [
                 "^postcss",
-                "^css"
+                "^css",
+                "^sass",
+                "^less",
+                "^styl"
             ],
             "matchPackageNames": [
                 "autoprefixer",
-                "ember-cli-postcss"
+                "cssnano",
+                "postcss",
+                "postcss-cli",
+                "postcss-import",
+                "postcss-custom-media",
+                "postcss-custom-properties",
+                "postcss-color-mod-function",
+                "postcss-easy-import",
+                "ember-cli-postcss",
+                "gulp-postcss",
+                "sass",
+                "node-sass",
+                "sass-embedded",
+                "less",
+                "stylus",
+                "stylelint",
+                "tailwindcss"
             ],
             "groupName": "CSS preprocessors"
         },
