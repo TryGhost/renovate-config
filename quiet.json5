@@ -54,14 +54,12 @@
         // Keep CSS/style pipeline updates out of automerge for manual review
         {
             "description": "Do not automerge CSS preprocessors",
-            "matchPackagePatterns": [
-                "^postcss",
-                "^css",
-                "^sass",
-                "^less",
-                "^styl"
-            ],
             "matchPackageNames": [
+                "/^postcss/",
+                "/^css/",
+                "/^sass/",
+                "/^less/",
+                "/^styl/",
                 "autoprefixer",
                 "cssnano",
                 "postcss",
@@ -85,8 +83,8 @@
         },
         // Don't automerge major bumps for @tryghost/ packages, gscan, or knex-migrator
         {
-            "matchPackagePatterns": [
-                "^@tryghost/.+",
+            "matchPackageNames": [
+                "/^@tryghost/.+/",
                 "gscan",
                 "knex-migrator"
             ],
