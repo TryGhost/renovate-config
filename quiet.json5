@@ -83,6 +83,17 @@
             ],
             "automerge": false
         },
+        // Don't automerge major bumps for @tryghost/ packages, gscan, or knex-migrator
+        {
+            "matchPackagePatterns": [
+                "^@tryghost/.+",
+                "gscan",
+                "knex-migrator"
+            ],
+            "major": {
+                "automerge": false
+            }
+        },
         // Group types packages together
         {
             "matchPackagePrefixes": [
