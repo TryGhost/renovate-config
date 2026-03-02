@@ -2,24 +2,24 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "description": "Base configuration rules with quiet automerging",
     "extends": [
-        // https://docs.renovatebot.com/presets-config/#configrecommended
-        "config:recommended",
+        // https://docs.renovatebot.com/presets-config/#configbest-practices
+        "config:best-practices",
         // This is helpful for seeing the state of dependencies
         ":dependencyDashboard",
         // Don't limit the number of PRs we can open
         ":disableRateLimiting",
-        // Lock file maintenance is really critical to keeping a repository healthy
-        ":maintainLockFilesWeekly",
         // We don't use semantic commits
         ":semanticCommitsDisabled",
         // We pin dependencies to keep dependencies deterministic
         ":pinDependencies",
         ":pinDevDependencies",
-        // This isn't part of the recommended config, so adding it as we use vite
+        // This isn't part of the core recommendation, so adding it as we use Vite
         "group:vite",
-        // Force waiting 3 days for NPM packages before updating
-        // This helps protect us against any compromised packages and
-        // from pacakges being deleted from NPM
+        // These are included via config:best-practices, but kept explicit because
+        // they are critical safeguards we never want to accidentally drop.
+        // - Weekly lockfile maintenance keeps dependency metadata healthy.
+        // - Minimum release age reduces risk from compromised/fresh npm releases.
+        ":maintainLockFilesWeekly",
         "security:minimumReleaseAgeNpm"
     ],
     // Don't separate out PRs for individual major jumps
