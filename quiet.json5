@@ -50,7 +50,8 @@
             "matchDepTypes": [
                 "devDependencies",
                 "dependencies",
-                "optionalDependencies"
+                "optionalDependencies",
+                "packageManager"
             ],
             "automerge": true,
             "automergeType": "pr",
