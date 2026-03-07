@@ -46,7 +46,9 @@
                 "devDependencies",
                 "dependencies",
                 "optionalDependencies",
-                "peerDependencies"
+                "peerDependencies",
+                "packageManager",
+                "action"
             ],
             "automerge": true,
             "automergeType": "pr"
