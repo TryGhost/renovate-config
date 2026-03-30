@@ -48,7 +48,8 @@
                 "optionalDependencies",
                 "peerDependencies",
                 "packageManager",
-                "action"
+                "action",
+                "uses-with"
             ],
             "automerge": true,
             "automergeType": "pr"
