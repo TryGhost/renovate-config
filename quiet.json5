@@ -148,6 +148,17 @@
                 "metascraper"
             ],
             "groupName": "metascraper"
+        },
+        // Pin @elastic/elasticsearch and @elastic/transport to v8 — production
+        // runs ElasticSearch 8 (ref INC-275). Renovate will not propose v9
+        // bumps until this rule is lifted.
+        {
+            "description": "Pin @elastic/elasticsearch to v8",
+            "matchPackageNames": [
+                "@elastic/elasticsearch",
+                "@elastic/transport"
+            ],
+            "allowedVersions": "<9"
         }
     ]
 }
