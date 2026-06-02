@@ -5,6 +5,16 @@
         "github>tryghost/renovate-config:quiet.json5"
     ],
     "packageRules": [
+        {
+            "matchPackageNames": [
+                "@tryghost/theme-translations"
+            ],
+            "automerge": true,
+            "automergeType": "pr",
+            "schedule": [
+                "every weekday"
+            ]
+        },
         // Keep beeper on v2 for theme build compatibility.
         {
             "matchPackageNames": [
