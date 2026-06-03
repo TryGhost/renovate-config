@@ -1,0 +1,11 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Temporary anti-pattern preset that extends default configuration without automerging major dependency upgrades",
+  "extends": ["github>tryghost/renovate-config"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    }
+  ]
+}

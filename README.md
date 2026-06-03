@@ -2,6 +2,13 @@
 
 Renovate presets for our GitHub repositories
 
+## Presets
+
+- `default` - Quiet configuration with automerge enabled for dependency upgrades
+- `safe` - Same as `default`, but major dependency upgrades are not automerged. This preset is an anti-pattern and should only be used as a temporary solution until CI tests are reliable enough to use `default`.
+- `theme` - Base configuration rules for Ghost theme repositories
+- `terraform` - Base configuration rules for Terraform repositories
+
 ## Validation
 
 ### Quick test
