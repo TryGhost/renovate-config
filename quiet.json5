@@ -6,8 +6,7 @@
         "config:best-practices",
         // This is helpful for seeing the state of dependencies
         ":dependencyDashboard",
-        // Don't limit the number of PRs we can open
-        ":disableRateLimiting",
+        // Use default rate limiting (10 open PRs, 2 PRs/hour) to control CI costs
         // We don't use semantic commits
         ":semanticCommitsDisabled",
         // We pin dependencies to keep dependencies deterministic
