@@ -18,7 +18,7 @@ Use a named preset when the repository needs a more specific policy:
 | Preset | Reference | Purpose |
 | --- | --- | --- |
 | `default` | `local>TryGhost/renovate-config` | Extends `quiet.json5` with broad automerge and its documented exceptions. |
-| `safe` | `local>TryGhost/renovate-config:safe` | Extends `default` but disables major-update automerge. Use it temporarily while CI cannot safely validate major updates. |
+| `safe` | `local>TryGhost/renovate-config:safe` | Extends `default` but disables major-update automerge. This preset is an anti-pattern; avoid it and use it only temporarily when unavoidable. |
 | `theme` | `local>TryGhost/renovate-config:theme.json5` | Extends `quiet.json5` with rules for Ghost theme repositories. |
 | `terraform` | `local>TryGhost/renovate-config:terraform.json5` | Applies Terraform-specific labels, version limits, and automerge policy. |
 

@@ -27,7 +27,7 @@ node --check test/serve-presets.mjs
 
 - `default.json` is the entrypoint for consumers that extend `local>TryGhost/renovate-config` without a preset name.
 - `quiet.json5` owns the shared policy used by the default and theme presets. It broadly enables dependency automerge, then applies explicit exceptions and compatibility limits.
-- `safe.json` is a temporary alternative for repositories whose CI cannot safely validate major dependency updates.
+- `safe.json` is an anti-pattern and should be avoided. It exists only as a temporary fallback for repositories whose CI cannot safely validate major dependency updates.
 - `renovate-config.json` is a separate onboarding configuration, not the default consumer entrypoint. The current harness validates its syntax but does not exercise its remote preset resolution.
 - Presets are consumed from the default branch. A semantically valid-looking edit can change dependency behavior across many repositories immediately after merge.
 
