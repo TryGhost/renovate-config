@@ -24,7 +24,7 @@ Run all tests (validation, preset resolution, and dry run):
 You can validate the config syntax by running
 
 ```bash
-npx -p  renovate renovate-config-validator
+npx -p renovate renovate-config-validator
 ```
 
 This is run in CI, to try to prevent bad config
@@ -47,7 +47,7 @@ Create a new [personal access token](https://docs.github.com/en/authentication/k
 3. Run the following command
 
 ```bash
-RENOVATE_CONFIG_FILE=~/Sites/renovate-config/quiet.json5 RENOVATE_TOKEN=$GITHUB_RENOVATE_TOKEN  renovate --dry-run=full TryGhost/Ghost
+RENOVATE_CONFIG_FILE=~/Sites/renovate-config/quiet.json5 RENOVATE_TOKEN=$GITHUB_RENOVATE_TOKEN renovate --dry-run=full TryGhost/Ghost
 ```
 
 # Copyright & License

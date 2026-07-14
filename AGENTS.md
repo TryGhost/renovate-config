@@ -16,17 +16,18 @@ This is a Renovate configuration repository that provides presets for Ghost Foun
 ### Validation
 Validate the configuration syntax:
 ```bash
-npx -p renovate renovate-config-validator
+./test.sh
 ```
 
 ### Testing
 Test configuration changes against a repository:
 ```bash
 # Basic dry-run test
-npx renovate --platform=local --dry-run <path-to-repository>
+npx -p renovate renovate --platform=local --dry-run=extract --onboarding=false --require-config=required
 
 # Test with specific configuration
-npx renovate --platform=local --dry-run --renovate-config-file=<path-to-config> <path-to-repository>
+RENOVATE_CONFIG_FILE=/path/to/config \
+  npx -p renovate renovate --platform=local --dry-run=extract --onboarding=false --require-config=required
 ```
 
 ## Architecture & Configuration Approach
