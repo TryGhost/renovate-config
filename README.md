@@ -1,55 +1,43 @@
 # Renovate Config
 
-Renovate presets for our GitHub repositories
+Shared Renovate presets that control dependency updates across Ghost Foundation repositories.
 
-## Presets
+## Using the presets
 
-- `default` - Quiet configuration with automerge enabled for dependency upgrades
-- `safe` - Same as `default`, but major dependency upgrades are not automerged. This preset is an anti-pattern and should only be used as a temporary solution until CI tests are reliable enough to use `default`.
-- `theme` - Base configuration rules for Ghost theme repositories
-- `terraform` - Base configuration rules for Terraform repositories
+Reference the appropriate preset from a dedicated Renovate configuration file in the consuming repository:
 
-## Validation
+```json
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>TryGhost/renovate-config"]
+}
+```
 
-### Quick test
+Use a named preset when the repository needs a more specific policy:
 
-Run all tests (validation, preset resolution, and dry run):
+| Preset | Reference | Purpose |
+| --- | --- | --- |
+| `default` | `local>TryGhost/renovate-config` | Extends `quiet.json5` with broad automerge and its documented exceptions. |
+| `safe` | `local>TryGhost/renovate-config:safe` | Extends `default` but disables major-update automerge. Use it temporarily while CI cannot safely validate major updates. |
+| `theme` | `local>TryGhost/renovate-config:theme.json5` | Extends `quiet.json5` with rules for Ghost theme repositories. |
+| `terraform` | `local>TryGhost/renovate-config:terraform.json5` | Applies Terraform-specific labels, version limits, and automerge policy. |
+
+`quiet.json5` is the shared policy layer behind the default and theme presets. Consuming repositories should normally select one of the public presets above rather than extend it directly.
+
+## Validating changes
+
+The test harness requires Node.js 24.11.0 and Renovate 43.262.2. Install the pinned Renovate CLI globally so the repository remains dependency-free:
 
 ```bash
+nvm use
+npm install --global renovate@43.262.2
 ./test.sh
 ```
 
-### Manual validation
+The test command validates every configuration file, applies strict validation where the current presets support it, resolves the consumable presets through a temporary loopback server, and runs dependency extraction against npm and Terraform fixtures.
 
-You can validate the config syntax by running
-
-```bash
-npx -p renovate renovate-config-validator
-```
-
-This is run in CI, to try to prevent bad config
-
-## Testing
-
-1. Install Renovate CLI:
-   ```bash
-   npm install -g renovate
-   ```
-
-2. Create a GITHUB_RENOVATE_TOKEN token
-
-Create a new [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) in GitHub
-
-   ```bash
-   export GITHUB_RENOVATE_TOKEN=[your token here]
-   ```
-
-3. Run the following command
-
-```bash
-RENOVATE_CONFIG_FILE=~/Sites/renovate-config/quiet.json5 RENOVATE_TOKEN=$GITHUB_RENOVATE_TOKEN renovate --dry-run=full TryGhost/Ghost
-```
+Preset changes affect repositories across the Ghost Foundation organization. Keep changes narrowly scoped and use the full test command before opening a pull request.
 
 # Copyright & License
 
-Copyright (c) 2013-2026 Ghost Foundation - Released under the [MIT license](LICENSE).
+Copyright (c) 2013-2026 Ghost Foundation - Released under the [MIT license](LICENSE). Ghost and the Ghost Logo are trademarks of Ghost Foundation Ltd. Please see our [trademark policy](https://ghost.org/trademark/) for info on acceptable usage.
