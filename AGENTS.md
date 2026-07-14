@@ -14,6 +14,8 @@ npx --yes --package=renovate --call './test.sh'
 
 `./test.sh` is the authoritative validation command. It must pass before a preset or test-harness change is ready for review.
 
+The local harness does not require a GitHub token. A full dry run against a live GitHub repository does; follow the README's live-validation instructions and never commit or print `GITHUB_RENOVATE_TOKEN`.
+
 Useful focused checks while editing the harness are:
 
 ```bash
