@@ -26,12 +26,12 @@ Use a named preset when the repository needs a more specific policy:
 
 ## Validating changes
 
-The test harness requires Node.js 24.11.0 and Renovate 43.262.2. Install the pinned Renovate CLI globally so the repository remains dependency-free:
+The test harness uses the Node.js version declared in [`.nvmrc`](.nvmrc). The [test workflow](.github/workflows/test.yml) is the source of truth for the Renovate version used in CI. For local validation, use `npx` to make Renovate temporarily available to the harness without adding a global or repository dependency:
 
 ```bash
+nvm install
 nvm use
-npm install --global renovate@43.262.2
-./test.sh
+npx --yes --package=renovate --call './test.sh'
 ```
 
 The test command validates every configuration file, applies strict validation where the current presets support it, resolves the consumable presets through a temporary loopback server, and runs dependency extraction against npm and Terraform fixtures.

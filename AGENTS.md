@@ -4,12 +4,12 @@ This repository publishes shared Renovate presets for Ghost Foundation repositor
 
 ## Commands
 
-Use the repository's pinned Node.js and Renovate versions:
+Use the Node.js version declared in `.nvmrc`. The CI workflow is the source of truth for its Renovate version. For local validation, use `npx` so Renovate remains a temporary tool rather than a global or repository dependency.
 
 ```bash
+nvm install
 nvm use
-npm install --global renovate@43.262.2
-./test.sh
+npx --yes --package=renovate --call './test.sh'
 ```
 
 `./test.sh` is the authoritative validation command. It must pass before a preset or test-harness change is ready for review.
