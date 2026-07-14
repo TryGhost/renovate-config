@@ -1,5 +1,20 @@
 {
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
-        "github>tryghost/renovate-config"
+        "local>TryGhost/renovate-config"
     ],
+    "customManagers": [
+        {
+            "customType": "regex",
+            "description": "Update the Renovate CLI used by preset validation",
+            "managerFilePatterns": [
+                "/^\\.github\\/workflows\\/test\\.yml$/"
+            ],
+            "matchStrings": [
+                "npx --yes --package=renovate@(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+            ],
+            "depNameTemplate": "renovate",
+            "datasourceTemplate": "npm"
+        }
+    ]
 }
