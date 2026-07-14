@@ -1,0 +1,13 @@
+{
+  "name": "renovate-config-consumer-fixture",
+  "private": true,
+  "dependencies": {
+    "@tryghost/theme-translations": "0.4.0",
+    "beeper": "2.1.0",
+    "express": "4.18.0",
+    "postcss": "8.4.0"
+  },
+  "devDependencies": {
+    "vite": "5.0.0"
+  }
+}
