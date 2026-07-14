@@ -36,6 +36,21 @@ npx --yes --package=renovate --call './test.sh'
 
 The test command validates every configuration file, applies strict validation where the current presets support it, resolves the consumable presets through a temporary loopback server, and runs dependency extraction against npm and Terraform fixtures.
 
+### Live repository dry run
+
+The local test harness does not need GitHub credentials. To exercise a preset against the live `TryGhost/Ghost` repository, create a personal access token following [Renovate's GitHub authentication guidance](https://docs.renovatebot.com/modules/platform/github/#authentication) and expose it as `GITHUB_RENOVATE_TOKEN` through your shell or secret manager. Then run from the repository root:
+
+```bash
+RENOVATE_CONFIG_FILE="$PWD/quiet.json5" \
+RENOVATE_TOKEN="$GITHUB_RENOVATE_TOKEN" \
+npx --yes --package=renovate renovate \
+  --platform=github \
+  --dry-run=full \
+  TryGhost/Ghost
+```
+
+Change `RENOVATE_CONFIG_FILE` when testing a different preset. Never commit or print the token.
+
 Preset changes affect repositories across the Ghost Foundation organization. Keep changes narrowly scoped and use the full test command before opening a pull request.
 
 # Copyright & License
