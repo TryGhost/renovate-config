@@ -7,6 +7,7 @@ const presetFiles = new Set([
     '/.github/renovate.json5',
     '/default.json',
     '/quiet.json5',
+    '/renovate-config.json',
     '/safe.json',
     '/terraform.json5',
     '/theme.json5'
@@ -28,6 +29,8 @@ const server = createServer(async (request, response) => {
     const baseUrl = `http://127.0.0.1:${server.address().port}`;
     const preset = await readFile(resolve(rootDirectory, `.${path}`), 'utf8');
     const localPreset = preset
+        .replaceAll('local>TryGhost/renovate-config:quiet.json5', `${baseUrl}/quiet.json5`)
+        .replaceAll('local>TryGhost/renovate-config', `${baseUrl}/default.json`)
         .replaceAll('github>tryghost/renovate-config:quiet.json5', `${baseUrl}/quiet.json5`)
         .replaceAll('github>tryghost/renovate-config', `${baseUrl}/default.json`);
 

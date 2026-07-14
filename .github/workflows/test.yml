@@ -29,11 +29,8 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - name: Install Renovate CLI
-        run: npm install --global renovate@43.262.2
-
       - name: Run tests
-        run: ./test.sh
+        run: npx --yes --package=renovate@43.262.2 --call './test/run.sh'
 
   required-checks-pass:
     name: Required checks pass
