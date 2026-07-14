@@ -9,17 +9,18 @@ Use the Node.js version declared in `.nvmrc`. The CI workflow is the source of t
 ```bash
 nvm install
 nvm use
-npx --yes --package=renovate --call './test.sh'
+npx --yes --package=renovate --call './test/run.sh'
 ```
 
-`./test.sh` is the authoritative validation command. It must pass before a preset or test-harness change is ready for review.
+`./test/run.sh` is the authoritative validation command. It must pass before a preset or test-harness change is ready for review.
 
 The local harness does not require a GitHub token. A full dry run against a live GitHub repository does; follow the README's live-validation instructions and never commit or print `GITHUB_RENOVATE_TOKEN`.
 
 Useful focused checks while editing the harness are:
 
 ```bash
-bash -n test.sh
+bash -n test/run.sh
+node --check test/assert-preset.mjs
 node --check test/serve-presets.mjs
 ```
 
@@ -28,13 +29,13 @@ node --check test/serve-presets.mjs
 - `default.json` is the entrypoint for consumers that extend `local>TryGhost/renovate-config` without a preset name.
 - `quiet.json5` owns the shared policy used by the default and theme presets. It broadly enables dependency automerge, then applies explicit exceptions and compatibility limits.
 - `safe.json` is an anti-pattern and should be avoided. It exists only as a temporary fallback for repositories whose CI cannot safely validate major dependency updates.
-- `renovate-config.json` is a separate onboarding configuration, not the default consumer entrypoint. The current harness validates its syntax but does not exercise its remote preset resolution.
+- `renovate-config.json` is a legacy named public alias, not the repository's active config or the default consumer entrypoint. The harness exercises its preset resolution and effective policy alongside every other consumable preset.
 - Presets are consumed from the default branch. A semantically valid-looking edit can change dependency behavior across many repositories immediately after merge.
 
 Do not change preset semantics as incidental cleanup. When a semantic change is required, keep it narrow, explain the affected consumers, and add or update a consumer-level regression check.
 
 ## Test architecture
 
-`test.sh` enforces the version in `.nvmrc`, validates the configuration files, and creates an isolated consumer fixture. `test/serve-presets.mjs` serves rewritten copies of the checked-out presets over loopback so nested `extends` references resolve to the branch under test instead of published `main`. The fixture exercises npm and Terraform extraction without adding a root package manifest or repository dependencies.
+`test/run.sh` enforces the version in `.nvmrc`, validates the configuration files, and creates an isolated consumer fixture. `test/serve-presets.mjs` serves rewritten copies of the checked-out presets over loopback so nested `extends` references resolve to the branch under test instead of published `main`. `test/assert-preset.mjs` checks the resolved policy and extracted npm and Terraform dependencies. The fixture does not add a root package manifest or repository dependencies.
 
 Temporary files and the loopback server are cleaned up by the harness. Keep fixtures deterministic and do not add credentials, network tokens, or generated dependency state to the repository.

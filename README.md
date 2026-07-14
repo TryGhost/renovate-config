@@ -31,10 +31,10 @@ The test harness uses the Node.js version declared in [`.nvmrc`](.nvmrc). The [t
 ```bash
 nvm install
 nvm use
-npx --yes --package=renovate --call './test.sh'
+npx --yes --package=renovate --call './test/run.sh'
 ```
 
-The test command validates every configuration file, applies strict validation where the current presets support it, resolves the consumable presets through a temporary loopback server, and runs dependency extraction against npm and Terraform fixtures.
+The test command validates every configuration file, applies strict validation where the current presets support it, resolves every consumable preset and the legacy named alias through a temporary loopback server, asserts their effective policies, and runs dependency extraction against npm and Terraform fixtures.
 
 ### Live repository dry run
 
