@@ -30,7 +30,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Run tests
-        run: npx --yes --package=renovate@43.262.2 --call './test/run.sh'
+        run: npx --yes --package=renovate@43.272.9 --call './test/run.sh'
 
   required-checks-pass:
     name: Required checks pass
