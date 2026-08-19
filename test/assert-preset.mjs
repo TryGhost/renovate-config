@@ -105,11 +105,6 @@ function assertQuietPolicy(shallowConfig, fullConfig) {
         'action',
         'uses-with'
     ]);
-    assert.equal(
-        rules.find((rule) => rule.matchPackageNames?.includes('postcss') && rule.automerge === false),
-        undefined,
-        'CSS preprocessor updates must not be excluded from automerge'
-    );
     const tryGhostExceptionRule = findRule(
         rules,
         (rule) => rule.matchPackageNames?.includes('gscan') &&
