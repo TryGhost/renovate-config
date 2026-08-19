@@ -62,10 +62,6 @@ function findEvent(events, message) {
     return event;
 }
 
-function hasDescription(rule, description) {
-    return rule.description?.includes(description) === true;
-}
-
 function findRule(rules, predicate, description) {
     const rule = rules.find(predicate);
     assert.ok(rule, `Resolved policy is missing ${description}`);
@@ -109,12 +105,10 @@ function assertQuietPolicy(shallowConfig, fullConfig) {
         'action',
         'uses-with'
     ]);
-    const cssExceptionRule = findRule(
-        rules,
-        (rule) => hasDescription(rule, 'Do not automerge CSS preprocessors') &&
-            rule.matchPackageNames?.includes('postcss') &&
-            rule.automerge === false,
-        'the CSS preprocessor automerge exception'
+    assert.equal(
+        rules.find((rule) => rule.matchPackageNames?.includes('postcss') && rule.automerge === false),
+        undefined,
+        'CSS preprocessor updates must not be excluded from automerge'
     );
     const tryGhostExceptionRule = findRule(
         rules,
@@ -123,7 +117,6 @@ function assertQuietPolicy(shallowConfig, fullConfig) {
             rule.automerge === false,
         'the TryGhost major-update automerge exception'
     );
-    assert.ok(rules.indexOf(broadAutomergeRule) < rules.indexOf(cssExceptionRule));
     assert.ok(rules.indexOf(broadAutomergeRule) < rules.indexOf(tryGhostExceptionRule));
     findRule(
         rules,
@@ -228,12 +221,12 @@ function assertConfigSpecificPolicy(shallowEvent, fullConfig) {
     assertQuietPolicy(shallowConfig, fullConfig);
 
     const expectedRuleCounts = new Map([
-        ['.github/renovate.json5', 9],
-        ['default.json', 9],
-        ['quiet.json5', 9],
-        ['renovate-config.json', 9],
-        ['safe.json', 10],
-        ['theme.json5', 11]
+        ['.github/renovate.json5', 8],
+        ['default.json', 8],
+        ['quiet.json5', 8],
+        ['renovate-config.json', 8],
+        ['safe.json', 9],
+        ['theme.json5', 10]
     ]);
     assert.equal(shallowConfig.packageRules.length, expectedRuleCounts.get(configFile));
 
