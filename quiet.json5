@@ -58,36 +58,6 @@
             "automerge": true,
             "automergeType": "pr"
         },
-        // Keep CSS/style pipeline updates out of automerge for manual review
-        {
-            "description": "Do not automerge CSS preprocessors",
-            "matchPackageNames": [
-                "/^postcss/",
-                "/^css/",
-                "/^sass/",
-                "/^less/",
-                "/^styl/",
-                "autoprefixer",
-                "cssnano",
-                "postcss",
-                "postcss-cli",
-                "postcss-import",
-                "postcss-custom-media",
-                "postcss-custom-properties",
-                "postcss-color-mod-function",
-                "postcss-easy-import",
-                "ember-cli-postcss",
-                "gulp-postcss",
-                "sass",
-                "node-sass",
-                "sass-embedded",
-                "less",
-                "stylus",
-                "stylelint",
-                "tailwindcss"
-            ],
-            "automerge": false
-        },
         // Don't automerge major bumps for @tryghost/ packages, gscan, or knex-migrator
         {
             "matchPackageNames": [
