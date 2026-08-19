@@ -28,12 +28,12 @@
     // Don't have separate PRs for minor and patch updates
     "separateMinorPatch": false,
     // https://docs.renovatebot.com/configuration-options/#rebasewhen
-    // Rebase only when a branch actually conflicts. "automerging" resolves to
-    // "never" for any PR a package rule excludes from automerge, so those PRs
-    // went stale; "behind-base-branch" force-pushes and re-runs CI on every
-    // base commit for no gain when branch protection doesn't require branches
-    // to be up to date.
-    "rebaseWhen": "conflicted",
+    // "auto" resolves per branch: automerge PRs, and every PR on repos whose
+    // branch protection requires up-to-date branches, rebase whenever behind;
+    // everything else rebases only on conflict. "automerging" resolved to
+    // "never" for non-automerge PRs (they went stale); "conflicted" stalls
+    // automerge on repos that require up-to-date branches.
+    "rebaseWhen": "auto",
     // Run `yarn-deduplicate --strategy highest` after yarn.lock updates
     "postUpdateOptions": [
         "yarnDedupeHighest"
