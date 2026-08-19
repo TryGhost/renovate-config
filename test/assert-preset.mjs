@@ -78,7 +78,7 @@ function isBroadAutomergeRule(rule) {
 function assertQuietPolicy(shallowConfig, fullConfig) {
     assert.equal(shallowConfig.separateMultipleMajor, false);
     assert.equal(shallowConfig.separateMinorPatch, false);
-    assert.equal(shallowConfig.rebaseWhen, 'automerging');
+    assert.equal(shallowConfig.rebaseWhen, 'conflicted');
     assert.deepEqual(shallowConfig.postUpdateOptions, ['yarnDedupeHighest']);
     assert.equal(shallowConfig.lockFileMaintenance.automerge, true);
 
