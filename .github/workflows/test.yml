@@ -1,15 +1,50 @@
 name: Test
 on:
   push:
+    branches:
+      - main
   pull_request:
+
 env:
   LOG_LEVEL: debug
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   preset:
+    name: Preset validation
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
 
       - name: Run tests
-        run: ./test.sh
+        run: npx --yes --package=renovate@43.262.2 --call './test/run.sh'
+
+  required-checks-pass:
+    name: Required checks pass
+    if: always()
+    needs:
+      - preset
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Verify required jobs
+        env:
+          PRESET_RESULT: ${{ needs.preset.result }}
+        run: |
+          if [[ "$PRESET_RESULT" != "success" ]]; then
+            echo "::error::Preset validation finished with result: $PRESET_RESULT"
+            exit 1
+          fi
