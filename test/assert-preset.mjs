@@ -20,7 +20,6 @@ const expectedPresetPaths = new Map([
 const quietPresetNames = [
     'config:best-practices',
     ':dependencyDashboard',
-    ':disableRateLimiting',
     ':semanticCommitsDisabled',
     ':pinDependencies',
     ':pinDevDependencies',
@@ -83,8 +82,8 @@ function assertQuietPolicy(shallowConfig, fullConfig) {
     assert.equal(shallowConfig.lockFileMaintenance.automerge, true);
 
     assert.equal(fullConfig.dependencyDashboard, true);
-    assert.equal(fullConfig.prConcurrentLimit, 0);
-    assert.equal(fullConfig.prHourlyLimit, 0);
+    assert.equal(fullConfig.prConcurrentLimit, 10);
+    assert.equal(fullConfig.prHourlyLimit, 2);
     assert.equal(fullConfig.semanticCommits, 'disabled');
     assert.equal(fullConfig.lockFileMaintenance.enabled, true);
     assert.equal(fullConfig.lockFileMaintenance.automerge, true);
