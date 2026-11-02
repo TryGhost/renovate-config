@@ -1,0 +1,50 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "description": "Maintain Ghost's shared pnpm policy and reviewed pnpm major",
+    "extends": [
+        "local>TryGhost/renovate-config"
+    ],
+    "customManagers": [
+        {
+            "customType": "regex",
+            "managerFilePatterns": [
+                "/(^|/)pnpm-workspace\\.yaml$/"
+            ],
+            "matchStrings": [
+                "(?:^|\\n)[ \\t]+['\"]?@tryghost/pnpm-policy['\"]?:[ \\t]+['\"]?(?<currentValue>\\d+\\.\\d+\\.\\d+)['\"]?(?:[ \\t]*(?:#.*)?(?:\\n|$))"
+            ],
+            "depNameTemplate": "@tryghost/pnpm-policy",
+            "depTypeTemplate": "configDependencies",
+            "datasourceTemplate": "npm",
+            "versioningTemplate": "npm"
+        }
+    ],
+    "packageRules": [
+        {
+            "description": "Align Renovate with the 72-hour install policy, including first-party releases",
+            "matchDatasources": [
+                "npm"
+            ],
+            "minimumReleaseAge": "3 days"
+        },
+        {
+            "matchPackageNames": [
+                "pnpm"
+            ],
+            "matchDepTypes": [
+                "packageManager"
+            ],
+            "allowedVersions": ">=12.16.1 <13",
+            "minimumReleaseAge": "3 days"
+        },
+        {
+            "matchPackageNames": [
+                "@tryghost/pnpm-policy",
+                "TryGhost/renovate-config"
+            ],
+            "groupName": "pnpm policy",
+            "minimumReleaseAge": "3 days",
+            "automerge": false
+        }
+    ]
+}

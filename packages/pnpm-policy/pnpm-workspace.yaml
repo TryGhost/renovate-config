@@ -1,0 +1,7 @@
+pnpmfile: []
+include:
+  ./policy.yaml:
+    - minimumReleaseAge
+    - strictDepBuilds
+    - blockExoticSubdeps
+    - dangerouslyAllowAllBuilds

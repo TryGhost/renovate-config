@@ -3,6 +3,7 @@ set -euo pipefail
 
 readonly CONFIG_FILES=(
     ".github/renovate.json5"
+    "pnpm.json5"
     "default.json"
     "quiet.json5"
     "renovate-config.json"
@@ -13,6 +14,7 @@ readonly CONFIG_FILES=(
 
 readonly STRICT_CONFIG_FILES=(
     ".github/renovate.json5"
+    "pnpm.json5"
     "default.json"
     "renovate-config.json"
     "safe.json"

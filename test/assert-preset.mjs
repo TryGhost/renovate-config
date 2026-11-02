@@ -9,6 +9,7 @@ if (!configFile || !logFile) {
 
 const expectedPresetPaths = new Map([
     ['.github/renovate.json5', ['/.github/renovate.json5', '/default.json', '/quiet.json5']],
+    ['pnpm.json5', ['/pnpm.json5', '/default.json', '/quiet.json5']],
     ['default.json', ['/default.json', '/quiet.json5']],
     ['quiet.json5', ['/quiet.json5']],
     ['renovate-config.json', ['/renovate-config.json', '/default.json', '/quiet.json5']],
@@ -216,6 +217,7 @@ function assertConfigSpecificPolicy(shallowEvent, fullConfig) {
 
     const expectedRuleCounts = new Map([
         ['.github/renovate.json5', 8],
+        ['pnpm.json5', 11],
         ['default.json', 8],
         ['quiet.json5', 8],
         ['renovate-config.json', 8],
@@ -223,6 +225,11 @@ function assertConfigSpecificPolicy(shallowEvent, fullConfig) {
         ['theme.json5', 10]
     ]);
     assert.equal(shallowConfig.packageRules.length, expectedRuleCounts.get(configFile));
+
+    if (configFile === 'pnpm.json5') {
+        findRule(shallowConfig.packageRules, rule => rule.matchPackageNames?.includes('pnpm') && rule.allowedVersions === '>=12.16.1 <13' && rule.minimumReleaseAge === '3 days', 'reviewed pnpm range');
+        findRule(shallowConfig.packageRules, rule => rule.matchPackageNames?.includes('@tryghost/pnpm-policy') && rule.minimumReleaseAge === '3 days' && rule.automerge === false, 'reviewed policy updates with cooldown');
+    }
 
     if (configFile === 'safe.json') {
         const broadAutomergeRule = findRule(
@@ -264,7 +271,15 @@ function assertConfigSpecificPolicy(shallowEvent, fullConfig) {
 }
 
 function assertExtraction(extractionEvent, statsEvent) {
-    assert.deepEqual(statsEvent.stats.total, {fileCount: 3, depCount: 7});
+    assert.deepEqual(statsEvent.stats.total, {fileCount: configFile === 'pnpm.json5' ? 5 : 4, depCount: configFile === 'pnpm.json5' ? 8 : 7});
+
+    if (configFile === 'pnpm.json5') {
+        const policy = extractionEvent.packageFiles.regex.flatMap(({deps}) => deps);
+        assert.equal(policy.length, 1);
+        assert.equal(policy[0].depName, '@tryghost/pnpm-policy');
+        assert.equal(policy[0].currentValue, '1.0.0');
+        assert.equal(policy[0].depType, 'configDependencies');
+    }
 
     const npmDependencies = extractionEvent.packageFiles.npm
         .flatMap(({deps}) => deps)
