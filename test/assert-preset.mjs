@@ -271,7 +271,7 @@ function assertConfigSpecificPolicy(shallowEvent, fullConfig) {
 }
 
 function assertExtraction(extractionEvent, statsEvent) {
-    assert.deepEqual(statsEvent.stats.total, {fileCount: configFile === 'pnpm.json5' ? 5 : 4, depCount: configFile === 'pnpm.json5' ? 8 : 7});
+    assert.deepEqual(statsEvent.stats.total, {fileCount: configFile === 'pnpm.json5' ? 6 : 5, depCount: configFile === 'pnpm.json5' ? 10 : 9});
 
     if (configFile === 'pnpm.json5') {
         const policy = extractionEvent.packageFiles.regex.flatMap(({deps}) => deps);
@@ -280,6 +280,12 @@ function assertExtraction(extractionEvent, statsEvent) {
         assert.equal(policy[0].currentValue, '1.0.0');
         assert.equal(policy[0].depType, 'configDependencies');
     }
+
+    const action = extractionEvent.packageFiles['github-actions'].flatMap(({deps}) => deps).find(dep => dep.depName === 'TryGhost/renovate-config');
+    assert.ok(action, 'Extract the shared policy action');
+    assert.equal(action.currentValue, 'main');
+    assert.equal(action.currentDigest, '60ad7e20e540cb0510cbe2a6a927ce81cf22bedb');
+    assert.equal(action.skipReason, undefined, 'The pinned action must remain updateable');
 
     const npmDependencies = extractionEvent.packageFiles.npm
         .flatMap(({deps}) => deps)

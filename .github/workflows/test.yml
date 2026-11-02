@@ -32,19 +32,24 @@ jobs:
       - name: Run tests
         run: npx --yes --package=renovate@44.188.4 --call './test/run.sh'
 
+  policy:
+    uses: ./.github/workflows/pnpm-policy.yml
+
   required-checks-pass:
     name: Required checks pass
     if: always()
     needs:
       - preset
+      - policy
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
       - name: Verify required jobs
         env:
           PRESET_RESULT: ${{ needs.preset.result }}
+          POLICY_RESULT: ${{ needs.policy.result }}
         run: |
-          if [[ "$PRESET_RESULT" != "success" ]]; then
-            echo "::error::Preset validation finished with result: $PRESET_RESULT"
+          if [[ "$PRESET_RESULT" != "success" || "$POLICY_RESULT" != "success" ]]; then
+            echo "::error::Preset validation: $PRESET_RESULT; pnpm policy: $POLICY_RESULT"
             exit 1
           fi
