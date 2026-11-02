@@ -1,0 +1,7 @@
+name: Policy consumer fixture
+on: workflow_dispatch
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: TryGhost/renovate-config/.github/actions/pnpm-policy@60ad7e20e540cb0510cbe2a6a927ce81cf22bedb # main

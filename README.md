@@ -33,10 +33,11 @@ the effective settings, including repositories that still configure them locally
 
 ```yaml
 # After the repository has selected pnpm/Node and installed dependencies:
-- uses: TryGhost/renovate-config/.github/actions/pnpm-policy@<reviewed-commit-sha>
+- uses: TryGhost/renovate-config/.github/actions/pnpm-policy@<reviewed-commit-sha> # main
 ```
 
-Pin the action to a reviewed commit; Renovate proposes future updates. Add the
+Pin the action to a reviewed commit and retain the `# main` annotation so
+Renovate can discover the tracked branch and propose future digest updates. Add the
 step to an existing required test job so its check name stays stable. Keep exact
 build approvals and justified cooldown exceptions local and reviewed. The action
 checks effective values; repository administrators must protect its invocation

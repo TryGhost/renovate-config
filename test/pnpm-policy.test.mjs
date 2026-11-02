@@ -22,8 +22,8 @@ test('packed declarative policy, delegated settings and rejection paths', async 
     assert.equal(manifest.dependencies, undefined);
     assert.equal(manifest.optionalDependencies, undefined);
     await exec(pnpm, ['pack', '--pack-destination', temporary], {cwd: join(root, 'packages/pnpm-policy')});
-    const tarball = await readFile(join(temporary, 'tryghost-pnpm-policy-1.0.0.tgz'));
-    const {stdout: packedFiles} = await exec('tar', ['-tzf', join(temporary, 'tryghost-pnpm-policy-1.0.0.tgz')]);
+    const tarball = await readFile(join(temporary, `tryghost-pnpm-policy-${manifest.version}.tgz`));
+    const {stdout: packedFiles} = await exec('tar', ['-tzf', join(temporary, `tryghost-pnpm-policy-${manifest.version}.tgz`)]);
     assert.deepEqual(packedFiles.trim().split('\n').sort(), ['package/LICENSE', 'package/README.md', 'package/package.json', 'package/policy.yaml']);
     const integrity = `sha512-${createHash('sha512').update(tarball).digest('base64')}`;
     const server = createServer((request, response) => {
@@ -34,9 +34,9 @@ test('packed declarative policy, delegated settings and rejection paths', async 
         response.setHeader('content-type', 'application/json');
         response.end(JSON.stringify({
             name: manifest.name,
-            'dist-tags': {latest: '1.0.0'},
-            time: {'1.0.0': '2020-01-01T00:00:00.000Z'},
-            versions: {'1.0.0': {...manifest, dist: {integrity, tarball: `http://127.0.0.1:${server.address().port}/policy.tgz`}}}
+            'dist-tags': {latest: manifest.version},
+            time: {[manifest.version]: '2020-01-01T00:00:00.000Z'},
+            versions: {[manifest.version]: {...manifest, dist: {integrity, tarball: `http://127.0.0.1:${server.address().port}/policy.tgz`}}}
         }));
     });
     await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -49,7 +49,7 @@ test('packed declarative policy, delegated settings and rejection paths', async 
     await writeFile(join(consumer, '.npmrc'), `registry=${registry}\nstore-dir=${temporary}/store\n`);
     const config = {
         pnpmfile: [],
-        configDependencies: {[manifest.name]: '1.0.0'},
+        configDependencies: {[manifest.name]: manifest.version},
         bootConfig: {minimumReleaseAge: 4320},
         include: {[manifest.name]: Object.keys(policy)},
         allowBuilds: {'esbuild@0.28.2': true, 'dtrace-provider': false}
@@ -64,6 +64,18 @@ test('packed declarative policy, delegated settings and rejection paths', async 
         const {stdout} = await exec(pnpm, ['config', 'get', key, '--json'], {cwd: consumer});
         assert.equal(JSON.parse(stdout), value);
     }
+    for (const bootConfig of [{minimumReleaseAge: 0}, {}, {minimumReleaseAge: 4320, minimumReleaseAgeStrict: false}]) {
+        await writeConfig({...config, bootConfig});
+        await assert.rejects(exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}}), error => /bootConfig.minimumReleaseAge/.test(error.stderr));
+    }
+    await writeConfig({...config, minimumReleaseAgeStrict: false});
+    await assert.rejects(exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}}), error => /minimumReleaseAgeStrict must be true/.test(error.stderr));
+    await writeConfig({...config, trustLockfile: true});
+    await assert.rejects(exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}}), error => /trustLockfile must be false/.test(error.stderr));
+    await writeConfig({...config, permissions: {esbuild: {build: true}}});
+    await assert.rejects(exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}}), error => /Build approval must pin/.test(error.stderr));
+    await writeConfig({...config, permissions: {'esbuild@0.28.2': {build: true}, 'other-package': {skills: false}, 'nx': {build: false}}});
+    await exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}});
     await writeConfig({...config, minimumReleaseAge: 0});
     await assert.rejects(exec(pnpm, ['install'], {cwd: consumer}), error => /DUPLICATE_SETTING/.test(error.stdout + error.stderr));
     await writeConfig({...config, allowBuilds: {esbuild: true}});

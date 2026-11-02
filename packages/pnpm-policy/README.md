@@ -27,8 +27,11 @@ include:
 Run `pnpm install` and commit the lockfile. pnpm records the package integrity in
 its boot lock document. Keep `allowBuilds`, reviewed release-age exceptions,
 workspace layout, catalogs and application-specific hooks in the consuming repo.
-An allowed build must name an exact package version; denials can cover all
-versions. Do not add a lifecycle script or a regular dependency to this package.
+An allowed build must name an exact package version in either `allowBuilds`
+or `permissions.<selector>.build`; denials can cover all versions. The CI check
+also rejects non-strict release-age resolution, trusted-lockfile bypasses and a
+weakened bootstrap cooldown. Config-dependency users must explicitly set the
+bootstrap cooldown shown above. Do not add a lifecycle script or a regular dependency to this package.
 
 `bootConfig` is intentionally local: the policy package cannot govern its own
 installation or pnpm's bootstrap. Keep its cooldown explicit. Set `pnpmfile: []`
