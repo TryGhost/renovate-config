@@ -1,0 +1,15 @@
+{
+  "name": "@tryghost/pnpm-policy",
+  "version": "1.0.0",
+  "description": "Declarative pnpm supply-chain defaults for Ghost Foundation repositories",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TryGhost/renovate-config.git",
+    "directory": "packages/pnpm-policy"
+  },
+  "publishConfig": {"access": "public"},
+  "files": ["policy.yaml", "README.md", "LICENSE"],
+  "pnpm": {"config": "./policy.yaml"},
+  "packageManager": "pnpm@12.16.1+sha512.091d1dee7927575661b25dab3c2ae31cafc1c54d6b71ed6a6600cf0c1cb10434a447eae14015f1b23e2e6bedeed79df94a932e2164d2832280dce3fb32f656d1"
+}

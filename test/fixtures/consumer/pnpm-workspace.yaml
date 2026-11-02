@@ -1,0 +1,2 @@
+configDependencies:
+  '@tryghost/pnpm-policy': 1.0.0

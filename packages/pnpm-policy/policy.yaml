@@ -1,0 +1,6 @@
+{
+  "minimumReleaseAge": 4320,
+  "strictDepBuilds": true,
+  "blockExoticSubdeps": true,
+  "dangerouslyAllowAllBuilds": false
+}

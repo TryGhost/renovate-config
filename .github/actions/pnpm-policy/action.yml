@@ -1,0 +1,14 @@
+name: Check pnpm supply-chain policy
+description: Check effective pnpm settings and version-scoped build approvals
+inputs:
+  working-directory:
+    description: Directory containing pnpm-workspace.yaml
+    default: .
+runs:
+  using: composite
+  steps:
+    - name: Check effective pnpm policy
+      shell: bash
+      env:
+        PNPM_POLICY_DIRECTORY: ${{ inputs.working-directory }}
+      run: node "$GITHUB_ACTION_PATH/check.mjs" "$PNPM_POLICY_DIRECTORY"

@@ -5,6 +5,7 @@ import {resolve} from 'node:path';
 const [rootDirectory, portFile] = process.argv.slice(2);
 const presetFiles = new Set([
     '/.github/renovate.json5',
+    '/pnpm.json5',
     '/default.json',
     '/quiet.json5',
     '/renovate-config.json',
