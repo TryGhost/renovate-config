@@ -53,7 +53,7 @@ function exactVersionSelector(selector) {
     if (typeof selector !== 'string') {
         return false;
     }
-    const match = selector.match(/^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*@(.+)$/i);
+    const match = selector.match(/^(?:@[a-z0-9_][a-z0-9._-]*\/[a-z0-9_][a-z0-9._-]*|[a-z0-9][a-z0-9._-]*)@(.+)$/i);
     if (!match) {
         return false;
     }

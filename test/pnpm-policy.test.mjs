@@ -79,19 +79,19 @@ test('packed declarative policy, delegated settings and rejection paths', async 
     // Ghost legitimately approves two reviewed esbuild versions. An explicit
     // finite list must pass in both permission formats without permitting a range.
     await writeConfig({...config,
-        allowBuilds: {'esbuild@0.25.12 || 0.28.2': true, '@legacy/*': false},
-        permissions: {'@parcel/watcher@2.5.1 || 2.6.0': {build: true}},
-        minimumReleaseAgeExclude: ['markdown-it@14.3.3', '@nx/js@23.2.1 || 23.3.1'],
-        bootConfig: {...config.bootConfig, minimumReleaseAgeExclude: ['pnpm@12.16.1']}
+        allowBuilds: {'esbuild@0.25.12 || 0.28.2': true, '@scope/_pkg@1.2.3': true, '@legacy/*': false},
+        permissions: {'@parcel/watcher@2.5.1 || 2.6.0': {build: true}, '@_scope/pkg@1.2.3': {build: true}},
+        minimumReleaseAgeExclude: ['markdown-it@14.3.3', '@nx/js@23.2.1 || 23.3.1', '@scope/_pkg@1.2.3'],
+        bootConfig: {...config.bootConfig, minimumReleaseAgeExclude: ['pnpm@12.16.1', '@_scope/pkg@1.2.3']}
     });
     await exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}});
-    for (const selector of ['esbuild@^0.28.0', 'esbuild@>=0.28.2', 'esbuild@0.28.x', 'esbuild@0.28.2 || *', '*@0.28.2', 'esbuild@01.2.3', 'esbuild@1.2.3-01']) {
+    for (const selector of ['esbuild@^0.28.0', 'esbuild@>=0.28.2', 'esbuild@0.28.x', 'esbuild@0.28.2 || *', '*@0.28.2', '_pkg@1.2.3', 'esbuild@01.2.3', 'esbuild@1.2.3-01']) {
         for (const decision of [{allowBuilds: {[selector]: true}}, {permissions: {[selector]: {build: true}}}]) {
             await writeConfig({...config, ...decision});
             await assert.rejects(exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}}), error => /Build approval must pin exact versions/.test(error.stderr));
         }
     }
-    for (const selector of ['@tryghost/*', 'pnpm', '@nx/nx-*', 'nx@^23.0.0', 'nx@23.3.1 || *', '*', '**', '?*']) {
+    for (const selector of ['@tryghost/*', 'pnpm', '@nx/nx-*', 'nx@^23.0.0', 'nx@23.3.1 || *', '_pkg@1.2.3', '*', '**', '?*']) {
         for (const exception of [
             {minimumReleaseAgeExclude: [selector]},
             {bootConfig: {...config.bootConfig, minimumReleaseAgeExclude: [selector]}}
