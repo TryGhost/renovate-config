@@ -76,6 +76,30 @@ test('packed declarative policy, delegated settings and rejection paths', async 
     await assert.rejects(exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}}), error => /Build approval must pin/.test(error.stderr));
     await writeConfig({...config, permissions: {'esbuild@0.28.2': {build: true}, 'other-package': {skills: false}, 'nx': {build: false}}});
     await exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}});
+    // Ghost legitimately approves two reviewed esbuild versions. An explicit
+    // finite list must pass in both permission formats without permitting a range.
+    await writeConfig({...config,
+        allowBuilds: {'esbuild@0.25.12 || 0.28.2': true, '@legacy/*': false},
+        permissions: {'@parcel/watcher@2.5.1 || 2.6.0': {build: true}},
+        minimumReleaseAgeExclude: ['markdown-it@14.3.3', '@nx/js@23.2.1 || 23.3.1'],
+        bootConfig: {...config.bootConfig, minimumReleaseAgeExclude: ['pnpm@12.16.1']}
+    });
+    await exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}});
+    for (const selector of ['esbuild@^0.28.0', 'esbuild@>=0.28.2', 'esbuild@0.28.x', 'esbuild@0.28.2 || *', '*@0.28.2', 'esbuild@01.2.3', 'esbuild@1.2.3-01']) {
+        for (const decision of [{allowBuilds: {[selector]: true}}, {permissions: {[selector]: {build: true}}}]) {
+            await writeConfig({...config, ...decision});
+            await assert.rejects(exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}}), error => /Build approval must pin exact versions/.test(error.stderr));
+        }
+    }
+    for (const selector of ['@tryghost/*', 'pnpm', '@nx/nx-*', 'nx@^23.0.0', 'nx@23.3.1 || *', '*', '**', '?*']) {
+        for (const exception of [
+            {minimumReleaseAgeExclude: [selector]},
+            {bootConfig: {...config.bootConfig, minimumReleaseAgeExclude: [selector]}}
+        ]) {
+            await writeConfig({...config, ...exception});
+            await assert.rejects(exec(process.execPath, [check, consumer], {env: {...process.env, PNPM_BINARY: pnpm}}), error => /minimumReleaseAgeExclude must exempt exact versions/.test(error.stderr));
+        }
+    }
     await writeConfig({...config, minimumReleaseAge: 0});
     await assert.rejects(exec(pnpm, ['install'], {cwd: consumer}), error => /DUPLICATE_SETTING/.test(error.stdout + error.stderr));
     await writeConfig({...config, allowBuilds: {esbuild: true}});
