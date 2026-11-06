@@ -122,6 +122,81 @@
             ],
             "groupName": "metascraper"
         },
+        // Batch frequently released tooling into weekly PRs to cut CI runs
+        // across every consuming repo. Majors keep their own PRs, except the
+        // pnpm toolchain whose majors move together.
+        {
+            "description": "Weekly non-major GitHub Actions updates",
+            "matchManagers": [
+                "github-actions"
+            ],
+            "matchUpdateTypes": [
+                "minor",
+                "patch",
+                "digest",
+                "pin",
+                "pinDigest"
+            ],
+            "groupName": "GitHub Actions",
+            "schedule": [
+                "* * * * 0"
+            ]
+        },
+        {
+            "description": "Weekly Docker image digest updates",
+            "matchDatasources": [
+                "docker"
+            ],
+            "matchUpdateTypes": [
+                "digest",
+                "pin",
+                "pinDigest"
+            ],
+            "groupName": "Docker digests",
+            "schedule": [
+                "* * * * 0"
+            ]
+        },
+        {
+            "description": "Weekly pnpm toolchain updates",
+            "matchPackageNames": [
+                "pnpm",
+                "pnpm/action-setup"
+            ],
+            "groupName": "pnpm",
+            "schedule": [
+                "* * * * 0"
+            ]
+        },
+        {
+            "description": "Weekly oxc tooling updates",
+            "matchPackageNames": [
+                "oxfmt",
+                "/oxlint/"
+            ],
+            "matchUpdateTypes": [
+                "minor",
+                "patch"
+            ],
+            "groupName": "oxc tooling",
+            "schedule": [
+                "* * * * 0"
+            ]
+        },
+        {
+            "description": "Weekly vitest updates (grouped by the vitest monorepo preset)",
+            "matchPackageNames": [
+                "vitest",
+                "@vitest/**"
+            ],
+            "matchUpdateTypes": [
+                "minor",
+                "patch"
+            ],
+            "schedule": [
+                "* * * * 0"
+            ]
+        },
         // Pin @elastic/elasticsearch and @elastic/transport to v8 — production
         // runs ElasticSearch 8 (ref INC-275). Renovate will not propose v9
         // bumps until this rule is lifted.

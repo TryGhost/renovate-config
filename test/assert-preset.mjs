@@ -141,6 +141,32 @@ function assertQuietPolicy(shallowConfig, fullConfig) {
         (rule) => rule.groupName === 'metascraper',
         'the metascraper group'
     );
+    const weeklySchedule = ['* * * * 0'];
+    const weeklyGroups = [
+        ['GitHub Actions', (rule) => rule.matchManagers?.includes('github-actions') && !rule.matchUpdateTypes?.includes('major')],
+        ['Docker digests', (rule) => rule.matchDatasources?.includes('docker') && rule.matchUpdateTypes?.includes('digest')],
+        ['pnpm', (rule) => rule.matchPackageNames?.includes('pnpm') && rule.matchPackageNames?.includes('pnpm/action-setup')],
+        ['oxc tooling', (rule) => rule.matchPackageNames?.includes('oxfmt') && !rule.matchUpdateTypes?.includes('major')]
+    ];
+    for (const [groupName, predicate] of weeklyGroups) {
+        const rule = findRule(
+            rules,
+            (candidate) => candidate.groupName === groupName && predicate(candidate),
+            `the weekly ${groupName} group`
+        );
+        assert.deepEqual(rule.schedule, weeklySchedule);
+    }
+    const actionsRule = rules.find((rule) => rule.groupName === 'GitHub Actions');
+    const pnpmRule = rules.find((rule) => rule.groupName === 'pnpm');
+    assert.ok(rules.indexOf(actionsRule) < rules.indexOf(pnpmRule), 'pnpm/action-setup must land in the pnpm group');
+    findRule(
+        rules,
+        (rule) => rule.matchPackageNames?.includes('vitest') &&
+            !rule.matchUpdateTypes?.includes('major') &&
+            rule.groupName === undefined &&
+            rule.schedule?.[0] === weeklySchedule[0],
+        'the weekly vitest schedule'
+    );
     findRule(
         rules,
         (rule) => rule.matchPackageNames?.includes('@elastic/elasticsearch') &&
@@ -216,13 +242,13 @@ function assertConfigSpecificPolicy(shallowEvent, fullConfig) {
     assertQuietPolicy(shallowConfig, fullConfig);
 
     const expectedRuleCounts = new Map([
-        ['.github/renovate.json5', 8],
-        ['pnpm.json5', 11],
-        ['default.json', 8],
-        ['quiet.json5', 8],
-        ['renovate-config.json', 8],
-        ['safe.json', 9],
-        ['theme.json5', 10]
+        ['.github/renovate.json5', 13],
+        ['pnpm.json5', 16],
+        ['default.json', 13],
+        ['quiet.json5', 13],
+        ['renovate-config.json', 13],
+        ['safe.json', 14],
+        ['theme.json5', 15]
     ]);
     assert.equal(shallowConfig.packageRules.length, expectedRuleCounts.get(configFile));
 
