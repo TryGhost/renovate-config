@@ -30,7 +30,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Run tests
-        run: npx --yes --package=renovate@44.188.4 --call './test/run.sh'
+        run: npx --yes --package=renovate@44.211.0 --call './test/run.sh'
 
   policy:
     uses: ./.github/workflows/pnpm-policy.yml
