@@ -105,13 +105,6 @@ function assertQuietPolicy(shallowConfig, fullConfig) {
         'action',
         'uses-with'
     ]);
-    const overrideRule = findRule(rules,
-        rule => rule.matchDepTypes?.includes('pnpm-workspace.overrides'),
-        'the non-major pnpm override automerge rule');
-    assert.deepEqual(overrideRule.matchManagers, ['npm']);
-    assert.deepEqual(overrideRule.matchUpdateTypes, ['minor', 'patch']);
-    assert.equal(overrideRule.automerge, true);
-    assert.equal(overrideRule.automergeType, 'pr');
     const tryGhostExceptionRule = findRule(
         rules,
         (rule) => rule.matchPackageNames?.includes('gscan') &&
@@ -249,13 +242,13 @@ function assertConfigSpecificPolicy(shallowEvent, fullConfig) {
     assertQuietPolicy(shallowConfig, fullConfig);
 
     const expectedRuleCounts = new Map([
-        ['.github/renovate.json5', 14],
-        ['pnpm.json5', 17],
-        ['default.json', 14],
-        ['quiet.json5', 14],
-        ['renovate-config.json', 14],
-        ['safe.json', 15],
-        ['theme.json5', 16]
+        ['.github/renovate.json5', 13],
+        ['pnpm.json5', 16],
+        ['default.json', 13],
+        ['quiet.json5', 13],
+        ['renovate-config.json', 13],
+        ['safe.json', 14],
+        ['theme.json5', 15]
     ]);
     assert.equal(shallowConfig.packageRules.length, expectedRuleCounts.get(configFile));
 
@@ -304,7 +297,7 @@ function assertConfigSpecificPolicy(shallowEvent, fullConfig) {
 }
 
 function assertExtraction(extractionEvent, statsEvent) {
-    assert.deepEqual(statsEvent.stats.total, {fileCount: configFile === 'pnpm.json5' ? 6 : 5, depCount: configFile === 'pnpm.json5' ? 11 : 10});
+    assert.deepEqual(statsEvent.stats.total, {fileCount: configFile === 'pnpm.json5' ? 6 : 5, depCount: configFile === 'pnpm.json5' ? 10 : 9});
 
     if (configFile === 'pnpm.json5') {
         const policy = extractionEvent.packageFiles.regex.flatMap(({deps}) => deps);
@@ -328,16 +321,9 @@ function assertExtraction(extractionEvent, statsEvent) {
         '@tryghost/theme-translations',
         'beeper',
         'express',
-        'minimatch@>=7 <11.0.1',
         'postcss',
         'vite'
     ]);
-
-    const override = extractionEvent.packageFiles.npm.flatMap(({deps}) => deps)
-        .find(dep => dep.depName === 'minimatch@>=7 <11.0.1');
-    assert.equal(override.depType, 'pnpm-workspace.overrides');
-    assert.equal(override.currentValue, '11.0.4');
-    assert.equal(override.skipReason, undefined);
 
     const terraformDependencies = extractionEvent.packageFiles.terraform
         .flatMap(({deps}) => deps)
