@@ -57,6 +57,14 @@
             "automerge": true,
             "automergeType": "pr"
         },
+        // Overrides also need routine updates; major overrides require review.
+        {
+            "matchManagers": ["npm"],
+            "matchDepTypes": ["pnpm-workspace.overrides"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "automerge": true,
+            "automergeType": "pr"
+        },
         // Don't automerge major bumps for @tryghost/ packages, gscan, or knex-migrator
         {
             "matchPackageNames": [
