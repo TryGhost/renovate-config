@@ -49,10 +49,26 @@ function map(value, key) {
     return Object.entries(value);
 }
 
+function exactVersionSelector(selector) {
+    if (typeof selector !== 'string') {
+        return false;
+    }
+    const match = selector.match(/^(?:@[a-z0-9_][a-z0-9._-]*\/[a-z0-9_][a-z0-9._-]*|[a-z0-9][a-z0-9._-]*)@(.+)$/i);
+    if (!match) {
+        return false;
+    }
+    // pnpm accepts finite disjunctions such as esbuild@0.25.12 || 0.28.2.
+    // Every branch must identify a version, never a range or package pattern.
+    return match[1].split(/\s*\|\|\s*/).every(version => {
+        const semver = version.match(/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-([\da-z-]+(?:\.[\da-z-]+)*))?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?$/i);
+        return semver && (!semver[1] || semver[1].split('.').every(part => !/^0\d+$/.test(part)));
+    });
+}
+
 function checkBuild(name, allowed) {
     assert.equal(typeof allowed, 'boolean', `Invalid build decision for ${name}`);
     if (allowed) {
-        assert.match(name, /^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*@\d+\.\d+\.\d+(?:-[\da-z.-]+)?$/i, `Build approval must pin one exact version: ${name}`);
+        assert.ok(exactVersionSelector(name), `Build approval must pin exact versions: ${name}`);
     }
 }
 
@@ -67,9 +83,13 @@ for (const [name, capabilities] of map(get('permissions') || {}, 'permissions'))
     }
 }
 
-const exclusions = get('minimumReleaseAgeExclude') || [];
-assert.ok(Array.isArray(exclusions), 'minimumReleaseAgeExclude must be a list');
-assert.ok(!exclusions.some(value => value === '*' || value === '**'), 'Do not exempt every package from the release cooldown');
-assert.ok(!(boot.minimumReleaseAgeExclude || []).some(value => value === '*' || value === '**'),
-    'Do not exempt every bootstrap package from the release cooldown');
+for (const [key, exclusions] of [
+    ['minimumReleaseAgeExclude', get('minimumReleaseAgeExclude') ?? []],
+    ['bootConfig.minimumReleaseAgeExclude', boot.minimumReleaseAgeExclude ?? []]
+]) {
+    assert.ok(Array.isArray(exclusions), `${key} must be a list`);
+    for (const selector of exclusions) {
+        assert.ok(exactVersionSelector(selector), `${key} must exempt exact versions: ${selector}`);
+    }
+}
 console.log(`pnpm supply-chain policy passed (${version}); repository-specific exceptions still require review.`);
